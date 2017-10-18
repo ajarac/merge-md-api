@@ -1,9 +1,10 @@
+/// <reference path="../_all.d.ts" />
+'use strict';
 import * as fs from 'fs';
 
 const path: string = 'data/';
 
 export class FileClass {
-
 
     constructor(
         private _name: string,

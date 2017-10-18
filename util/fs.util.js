@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 const fs = require('fs');
 const file_1 = require('../class/file');
 class FsUtil {
-    saveFile(file, callback) {
+    static saveFile(file, callback) {
         if (!file.name || !file.content) {
             callback('Missing content and name');
         }
@@ -10,25 +10,22 @@ class FsUtil {
             fs.writeFile(file_1.FileClass.getPath(file.name), file.content, callback);
         }
     }
-    getFile(name) {
-        if (!this.checkIfFileExists(name)) {
-            return null;
-        }
-        else {
-            let a = this.getFileByName(name);
-            console.log(a);
-            return a;
-        }
+    static getFile(name, callback) {
+        let path = file_1.FileClass.getPath(name);
+        fs.exists(path, (exists) => {
+            console.log('EXISSTS', exists);
+            if (exists) {
+                fs.readFile(path, callback);
+            }
+            else {
+                callback(null);
+            }
+        });
     }
-    mergeFiles(file1, extend) {
+    static mergeFiles(file1, extend) {
         let finalFile;
         return finalFile;
     }
-    checkIfFileExists(name) {
-        return fs.existsSync(name);
-    }
-    getFileByName(name) {
-        return fs.readFileSync(file_1.FileClass.getPath(name));
-    }
 }
-exports.FsUtil = FsUtil;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = FsUtil;

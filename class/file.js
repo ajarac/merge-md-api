@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 const path = 'data/';
 class FileClass {
     constructor(_name, _content) {
