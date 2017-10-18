@@ -1,7 +1,9 @@
 import * as fs from 'fs';
 
+const path: string = 'data/';
 
-export class CreateFile {
+export class FileClass {
+
 
     constructor(
         private _name: string,
@@ -23,12 +25,13 @@ export class CreateFile {
         this._content = content;
     }
 
-    public createFile(): boolean {
-        if (!this._content || this._name) {
-            return false;
-        } else {
-            fs.
-        }
+
+    /**
+     * Create path with extension .md
+     * @returns string
+     */
+    public static getPath(name: string): string {
+        return path + name + '.md';
     }
 
 }

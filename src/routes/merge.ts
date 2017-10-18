@@ -3,18 +3,56 @@
 
 import * as express from 'express';
 import { FileBase } from '../entities/file.entities';
-
-
+import { FileClass } from '../class/file';
+import { FsUtil } from '../util/fs.util';
 module Route {
 
     class MergeMethods {
+        private fsUtil: FsUtil = new FsUtil();
+
+        /**
+         * Create the merge and return it
+         * @param  {express.Request} req
+         * @param  {express.Response} res
+         * @param  {express.NextFunction} next
+         */
         public getMerge(req: express.Request, res: express.Response, next: express.NextFunction) {
-            res.status(200).send({ name: 'test' });
+            if (!req.params.hasOwnProperty('fichero1') || !req.params.hasOwnProperty('extend')) {
+                return res.status(400).send({ error: 'Missing "fichero1" and/or "extend"' });
+            }
+            let file1: FileClass = this.fsUtil.getFile(req.params.fichero1);
+            let extend: FileClass = this.fsUtil.getFile(req.params.extend);
+
+            if (file1 === null || extend === null) {
+                return res.status(404).send({ error: `Files ${req.params.fichero1} and/or ${req.params.extend} does not extist` });
+            } else {
+                this.fsUtil.mergeFiles(file1, extend);
+
+                res.status(200).send({ name: 'test' });
+            }
         }
 
+        public test(req: express.Request, res: express.Response, next: express.NextFunction) {
+            return res.status(200).send(this.fsUtil.getFile('test'));
+        }
+
+        /**
+         * Create file with extension .md to ready test merge
+         * @param  {express.Request} req
+         * @param  {express.Response} res
+         * @param  {express.NextFunction} next
+         */
         public createFiles(req: express.Request, res: express.Response, next: express.NextFunction) {
             let fileBase: FileBase = req.body;
+            let fileClass: FileClass = new FileClass(fileBase.name, fileBase.content)
 
+            this.fsUtil.saveFile(fileClass, err => {
+                if (err) {
+                    res.status(400).send({ error: err, status: '400 Bad Request' });
+                } else {
+                    res.status(200).send(fileBase);
+                }
+            });
         }
 
     }
@@ -26,6 +64,7 @@ module Route {
 
         constructor() {
             this.router.get('/', this.mergeMethods.getMerge.bind(this.mergeMethods.getMerge));
+            this.router.get('/test', this.mergeMethods.test.bind(this.mergeMethods.test));
             this.router.post('/', this.mergeMethods.createFiles.bind(this.mergeMethods.createFiles));
         }
     }
