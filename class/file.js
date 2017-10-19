@@ -17,6 +17,9 @@ class FileClass {
     set content(content) {
         this._content = content;
     }
+    json() {
+        return { name: this._name, content: this._content };
+    }
     static getPath(name) {
         return path + name + '.md';
     }
