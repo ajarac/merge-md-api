@@ -2,9 +2,12 @@
 'use strict';
 
 import * as express from 'express';
+import async = require('async');
 import { FileBase } from '../entities/file.entities';
 import { FileClass } from '../class/file';
 import FsUtil from '../util/fs.util';
+
+
 module Route {
 
     class MergeMethods {
@@ -19,21 +22,29 @@ module Route {
             if (!req.params.hasOwnProperty('fichero1') || !req.params.hasOwnProperty('extend')) {
                 return res.status(400).send({ error: 'Missing "fichero1" and/or "extend"' });
             }
-            let file1: FileClass = FsUtil.getFile(req.params.fichero1);
-            let extend: FileClass = FsUtil.getFile(req.params.extend);
+            async.parallel({
+                file1: (cb) => FsUtil.getFile(req.params.fichero1, cb),
+                extend: (cb) => FsUtil.getFile(req.params.extend, cb)
+            }, (err, result) => {
+                if(err) {
+                    return res.status(500).send({error: err});
+                } else {
+                    let file1 = result.file1;
+                    let extend = result.extend;
+                    if (file1 === null || extend === null) {
+                        return res.status(404).send({ error: `Files ${req.params.fichero1} and/or ${req.params.extend} does not extist` });
+                    } else {
+                        FsUtil.mergeFiles(file1, extend);
+        
+                        res.status(200).send({ name: 'test' });
+                    }
+                }
+            });
 
-            if (file1 === null || extend === null) {
-                return res.status(404).send({ error: `Files ${req.params.fichero1} and/or ${req.params.extend} does not extist` });
-            } else {
-                FsUtil.mergeFiles(file1, extend);
-
-                res.status(200).send({ name: 'test' });
-            }
         }
 
         public test(req: express.Request, res: express.Response, next: express.NextFunction) {
             FsUtil.getFile('test', (err, file) => {
-                console.log('eeeeeeeeeeeeeeeeeeeeee', err, file);
                 return res.status(200).send(file);
             });
         }

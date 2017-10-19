@@ -8,6 +8,7 @@
   },
   "author": "Angel Jara",
   "dependencies": {
+    "@types/async": "^2.0.44",
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
     "grunt": "^0.4.5",
