@@ -1,9 +1,10 @@
 "use strict";
 const fs = require('fs');
-class CreateFile {
+class CreateFileUtil {
     constructor(_name, _content) {
         this._name = _name;
         this._content = _content;
+        this.path = 'data/';
     }
     get name() {
         return this._name;
@@ -17,14 +18,16 @@ class CreateFile {
     set content(content) {
         this._content = content;
     }
-    createFile() {
-        if (!this._content || this._name) {
-            return false;
+    createFile(callback) {
+        if (!this._content || !this._name) {
+            callback('Missing content and name');
         }
         else {
-            fs.
-            ;
+            fs.writeFile(this.getPath(), this._content, callback);
         }
     }
+    getPath() {
+        return this.path + this._name + '.md';
+    }
 }
-exports.CreateFile = CreateFile;
+exports.CreateFileUtil = CreateFileUtil;
