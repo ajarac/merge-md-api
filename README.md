@@ -67,8 +67,4 @@ localhost:8080/api/merge?fichero1='nameFile'&extend='nameExtend'
 
 Changing the names files to real files to merge.
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
 
