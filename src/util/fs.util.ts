@@ -54,18 +54,6 @@ export default class FsUtil {
     }
 
     /**
-     * Convert Buffer stream to File Class
-     * @param  {string} name
-     * @param  {Buffer} stream
-     * @returns FileClass
-     */
-    public static convertStreamToFile(name : string, stream : Buffer): FileClass {
-        let fileClass: FileClass = new FileClass(name, null);
-        fileClass.content = new Buffer(stream).toString();
-        return fileClass;
-    }
-
-    /**
      * Merge Files
      * @param  {string} file1
      * @param  {string} extend
@@ -80,6 +68,18 @@ export default class FsUtil {
                 })
                 .catch(reject);
         });
+    }
+
+    /**
+     * Convert Buffer stream to File Class
+     * @param  {string} name
+     * @param  {Buffer} stream
+     * @returns FileClass
+     */
+    private static convertStreamToFile(name : string, stream : Buffer): FileClass {
+        let fileClass: FileClass = new FileClass(name, null);
+        fileClass.content = new Buffer(stream).toString();
+        return fileClass;
     }
 
     /**
