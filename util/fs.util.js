@@ -39,11 +39,6 @@ class FsUtil {
             });
         });
     }
-    static convertStreamToFile(name, stream) {
-        let fileClass = new file_1.FileClass(name, null);
-        fileClass.content = new Buffer(stream).toString();
-        return fileClass;
-    }
     static mergeFiles(file1, extend) {
         return new Promise((resolve, reject) => {
             Promise
@@ -53,6 +48,11 @@ class FsUtil {
             })
                 .catch(reject);
         });
+    }
+    static convertStreamToFile(name, stream) {
+        let fileClass = new file_1.FileClass(name, null);
+        fileClass.content = new Buffer(stream).toString();
+        return fileClass;
     }
     static compareFiles(files) {
         let file = files[0];

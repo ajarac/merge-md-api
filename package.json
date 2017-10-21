@@ -4,7 +4,9 @@
   "description": "Test to Altran",
   "scripts": {
     "grunt": "grunt",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "node_modules/nodemon/bin/nodemon.js -w dist ./node_modules/.bin/jasmine — config=jasmine.json",
+    "watch": "node_modules/concurrently/src/main.js -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"node_modules/nodemon/bin/nodemon.js --inspect --delay 500ms dist/app/index.js\""
   },
   "author": "Angel Jara",
   "dependencies": {
@@ -19,5 +21,10 @@
     "tslint": "^3.6.0",
     "typescript": "^1.8.9",
     "typings": "^0.7.9"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^2.6.0",
+    "jasmine": "^2.8.0",
+    "nodemon": "^1.12.1"
   }
 }
